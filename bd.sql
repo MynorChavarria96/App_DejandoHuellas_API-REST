@@ -10,7 +10,6 @@ CREATE TABLE usuarios (
     contraseña VARCHAR(255) NOT NULL,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
 -- Crear tabla de propietarios
 CREATE TABLE propietarios (
     propietario_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +17,6 @@ CREATE TABLE propietarios (
     apellidos VARCHAR(50) NOT NULL,
     direccion VARCHAR(100),
     telefono VARCHAR(15),
-    email VARCHAR(50),
     usuario_id INT,
     FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
 );

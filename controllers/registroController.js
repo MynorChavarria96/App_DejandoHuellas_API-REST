@@ -56,6 +56,19 @@ exports.getUserById = (req, res) => {
   });
 };
 
+exports.getPropietarioById = (req, res) => {
+  const usuario_id = req.params.usuario_id;
+  Propietario.findById(usuario_id, (err, result) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.length === 0) {
+      return res.status(404).send({ message: 'Propietario no Encontado' });
+    }
+    res.send(result[0]);
+  });
+};
+
 exports.updatePassword = async (req, res) => {
   const { username, email, newPassword } = req.body;
   let errors = [];

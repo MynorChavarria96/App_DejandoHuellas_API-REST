@@ -13,7 +13,10 @@ const Propietario = {
         callback(null, result.insertId);
       }
     );
-  }
+  },
+  findById: (usuario_id, callback) => {
+    db.query('SELECT * FROM propietarios WHERE usuario_id = ?', [usuario_id], callback);
+  },
 };
 
 module.exports = Propietario;
