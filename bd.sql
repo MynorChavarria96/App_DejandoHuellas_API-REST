@@ -21,11 +21,17 @@ CREATE TABLE propietarios (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
 );
 
--- Crear tabla de especies
+
 CREATE TABLE especies (
     especie_id INT AUTO_INCREMENT PRIMARY KEY,
     nombre_especie VARCHAR(50) NOT NULL UNIQUE
 );
+CREATE TABLE generos (
+    genero_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_genero VARCHAR(50) NOT NULL
+);
+
+
 
 -- Crear tabla de mascotas
 CREATE TABLE mascotas (
@@ -33,15 +39,16 @@ CREATE TABLE mascotas (
     nombre VARCHAR(50) NOT NULL,
     especie_id INT,
     raza VARCHAR(50),
-    genero VARCHAR(10),
+    genero_id INT,
     fecha_nacimiento DATE,
     color VARCHAR(50),
     peso DECIMAL(5, 2),
+    foto VARCHAR(255) NOT NULL, 
     propietario_id INT,
-    usuario_id INT,
+    enfermedad_cronica VARCHAR(255) DEFAULT 'No tiene',
     FOREIGN KEY (propietario_id) REFERENCES propietarios(propietario_id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
-    FOREIGN KEY (especie_id) REFERENCES especies(especie_id)
+    FOREIGN KEY (especie_id) REFERENCES especies(especie_id),
+	FOREIGN KEY (genero_id) REFERENCES generos(genero_id)
 );
 
 -- Crear tabla de salud
@@ -100,6 +107,8 @@ INSERT INTO especies (nombre_especie) VALUES
 ('Ave'),
 ('Roedor'),
 ('Reptil'),
-('Hurón'),
-('Erizo'),
-('Chinchilla');
+('Otro')
+
+INSERT INTO generos (nombre_genero) VALUES
+('Macho'),
+('Hembra')
