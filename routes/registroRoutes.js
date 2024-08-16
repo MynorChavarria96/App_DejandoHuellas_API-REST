@@ -16,6 +16,7 @@ router.get('/mascotas/generos', mascotaController.getGenerosAll);
 // Ruta para crear una nueva mascota
 router.post('/mascotas', mascotaController.createMascota);
 router.put('/mascotas/update/:mascota_id', mascotaController.updateMascota);
+router.put('/mascotas/delete/:mascota_id', mascotaController.deleteMascota);
 
 router.get('/mascotas/mismascotas/:propietario_id', mascotaController.getMisMascotas);
 

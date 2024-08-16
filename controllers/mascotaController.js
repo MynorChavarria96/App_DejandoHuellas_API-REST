@@ -77,3 +77,16 @@ exports.getEspeciesAll = (req,res) => {
       res.status(200).send({ message: 'Mascota actualizada con éxito' });
     });
   };
+  exports.deleteMascota = (req, res) => {
+    const mascota_id = req.params.mascota_id;
+    
+    Mascota.delete(mascota_id, (err, affectedRows) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      if (affectedRows === 0) {
+        return res.status(404).send({ message: 'Mascota no encontrada o no eliminada' });
+      }
+      res.status(200).send({ message: 'Mascota eliminada con éxito' });
+    });
+  };

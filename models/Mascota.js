@@ -38,6 +38,20 @@ const Mascota = {
       callback(null, result.affectedRows);
     });
   },
+  delete: (mascota_id, callback) => {
+    const query = `
+         UPDATE mascotas 
+      SET activo = 0
+      WHERE mascota_id = ? 
+    `;
+
+    db.query(query, mascota_id, (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, result.affectedRows);
+    });
+  },
 
 };
 
