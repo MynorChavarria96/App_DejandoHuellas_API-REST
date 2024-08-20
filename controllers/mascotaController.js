@@ -63,6 +63,19 @@ exports.getEspeciesAll = (req,res) => {
     });
   };
 
+  exports.getMascotabyQr = (req,res) => {
+    const identificador_qr = req.params.identificador_qr;
+    Mascota.findbyQr(identificador_qr,(err, result) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      if (result.length === 0) {
+        return res.status(404).send({ message: 'No se encontró la mascota' });
+      }
+      res.send(result);
+    });
+  };
+
   exports.updateMascota = (req, res) => {
     const mascota_id = req.params.mascota_id;
     const mascotaData = req.body;

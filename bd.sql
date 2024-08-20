@@ -46,6 +46,8 @@ CREATE TABLE mascotas (
     foto VARCHAR(255) NOT NULL, 
     propietario_id INT,
     enfermedad_cronica VARCHAR(255) DEFAULT 'No tiene',
+    activo tinyint DEFAULT 1,
+    identificadorqr VARCHAR(255),
     FOREIGN KEY (propietario_id) REFERENCES propietarios(propietario_id),
     FOREIGN KEY (especie_id) REFERENCES especies(especie_id),
 	FOREIGN KEY (genero_id) REFERENCES generos(genero_id)

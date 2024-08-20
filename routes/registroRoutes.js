@@ -13,6 +13,8 @@ router.get('/Propietarios/id/:usuario_id', registroController.getPropietarioById
 router.get('/mascotas/especies', mascotaController.getEspeciesAll);
 router.get('/mascotas/generos', mascotaController.getGenerosAll);
 
+router.get('/infoqr/:identificador_qr', mascotaController.getMascotabyQr);
+
 // Ruta para crear una nueva mascota
 router.post('/mascotas', mascotaController.createMascota);
 router.put('/mascotas/update/:mascota_id', mascotaController.updateMascota);
