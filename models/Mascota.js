@@ -22,7 +22,8 @@ const Mascota = {
   },
   findMisMascotas: (propietario_id, callback) => {
 
-    db.query(`select m.mascota_id, m.nombre, m.especie_id, e.nombre_especie, m.raza, m.genero_id, g.nombre_genero, m.fecha_nacimiento, m.color, m.peso, m.foto, m.enfermedad_cronica
+    db.query(`select m.mascota_id, m.nombre, m.especie_id, e.nombre_especie, m.raza, m.genero_id, g.nombre_genero, m.fecha_nacimiento,
+       m.color, m.peso, m.foto, m.enfermedad_cronica, m.identificador_qr
     from mascotas m
     inner join especies e on e.especie_id = m.especie_id
     inner join generos g on g.genero_id = m.genero_id
