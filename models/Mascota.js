@@ -20,6 +20,21 @@ const Mascota = {
       callback(null, result.insertId);
     });
   },
+  createUbicacion:(ubicacionData, callback) => {
+    const { nombre, latitud, longitud, descripcion_adicional, mascota_id} = ubicacionData;
+
+    const query = `
+      INSERT INTO ubicaciones (nombre, latitud, longitud, descripcion_adicional, mascota_id) 
+      VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(query, [ nombre, latitud, longitud, descripcion_adicional, mascota_id], (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, result.insertId);
+    });
+  },
   findMisMascotas: (propietario_id, callback) => {
 
     db.query(`select m.mascota_id, m.nombre, m.especie_id, e.nombre_especie, m.raza, m.genero_id, g.nombre_genero, m.fecha_nacimiento,

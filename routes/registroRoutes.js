@@ -17,6 +17,7 @@ router.get('/infoqr/:identificador_qr', mascotaController.getMascotabyQr);
 
 // Ruta para crear una nueva mascota
 router.post('/mascotas', mascotaController.createMascota);
+router.post('/mascotas/ubicaciones', mascotaController.createubicacion);
 router.put('/mascotas/update/:mascota_id', mascotaController.updateMascota);
 router.put('/mascotas/delete/:mascota_id', mascotaController.deleteMascota);
 

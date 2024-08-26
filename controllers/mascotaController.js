@@ -50,6 +50,22 @@ exports.getEspeciesAll = (req,res) => {
     });
   };
 
+  exports.createubicacion = (req, res) => {
+    const { nombre, latitud, longitud, descripcion_adicional, mascota_id } = req.body;
+  
+    const ubicacionData = {
+      nombre, latitud, longitud, descripcion_adicional, mascota_id
+    };
+  
+    Mascota.createUbicacion(ubicacionData, (err, ubicacionId) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error al registrar ubicacion' });
+      }
+      res.status(201).json({ message: 'Ubicacion registrada con éxito', ubicacionId });
+    });
+  };
+
+
   exports.getMisMascotas = (req,res) => {
     const propietario_id = req.params.propietario_id;
     Mascota.findMisMascotas(propietario_id,(err, result) => {
