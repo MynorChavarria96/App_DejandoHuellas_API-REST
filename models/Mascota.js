@@ -17,6 +17,7 @@ const Mascota = {
       if (err) {
         return callback(err);
       }
+      
       callback(null, result.insertId);
     });
   },
