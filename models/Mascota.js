@@ -39,11 +39,13 @@ const Mascota = {
   findMisMascotas: (propietario_id, callback) => {
 
     db.query(`select m.mascota_id, m.nombre, m.especie_id, e.nombre_especie, m.raza, m.genero_id, g.nombre_genero, m.fecha_nacimiento,
-       m.color, m.peso, m.foto, m.enfermedad_cronica, m.identificador_qr
+       m.color, m.peso, m.foto, m.enfermedad_cronica, m.identificador_qr, 
+       u.nombre as nombre_lugar, u.descripcion_adicional as descripcion_lugar, u.latitud, u.longitud
     from mascotas m
     inner join especies e on e.especie_id = m.especie_id
     inner join generos g on g.genero_id = m.genero_id
-    where m.propietario_id = ? and activo = 1` , [propietario_id], callback);
+    inner join ubicaciones u on u.mascota_id = m.mascota_id
+    where m.propietario_id = ? and activo = 1 order by m.mascota_id desc` , [propietario_id], callback);
   },
   findbyQr: (identificador_qr, callback) => {
 
@@ -72,6 +74,23 @@ where m.identificador_qr = ?` , [identificador_qr], callback);
       callback(null, result.affectedRows);
     });
   },
+
+  updateUbicacion: (mascota_id, ubicacionData, callback) => {
+    const {  nombreUbicacion, latitud, longitud, descripcion_adicional} = ubicacionData;
+    const query = `
+      UPDATE ubicaciones 
+      SET nombre = ?, latitud = ?, longitud = ?, descripcion_adicional = ?
+      WHERE mascota_id = ? 
+    `;
+
+    db.query(query, [nombreUbicacion, latitud, longitud, descripcion_adicional, mascota_id], (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, result.affectedRows);
+    });
+  },
+
   delete: (mascota_id, callback) => {
     const query = `
          UPDATE mascotas 

@@ -94,10 +94,10 @@ exports.createMascota = (req, res) => {
 };
 
 exports.createubicacion = (req, res) => {
-  const { nombre, latitud, longitud, descripcion_adicional, mascota_id } = req.body;
+  const { nombreUbicacion, latitud, longitud, descripcion_adicional, mascota_id } = req.body;
 
   const ubicacionData = {
-    nombre, latitud, longitud, descripcion_adicional, mascota_id
+    nombreUbicacion, latitud, longitud, descripcion_adicional, mascota_id
   };
 
   Mascota.createUbicacion(ubicacionData, (err, ubicacionId) => {
@@ -138,6 +138,13 @@ exports.getMascotabyQr = (req, res) => {
 exports.updateMascota = (req, res) => {
   const mascota_id = req.params.mascota_id;
   const mascotaData = req.body;
+  const { nombreUbicacion, latitud, longitud, descripcion_adicional } = mascotaData;
+  const ubicacionData = {
+    nombreUbicacion,
+    latitud,
+    longitud,
+    descripcion_adicional,
+};
 
   Mascota.update(mascota_id, mascotaData, (err, affectedRows) => {
     if (err) {
@@ -146,7 +153,20 @@ exports.updateMascota = (req, res) => {
     if (affectedRows === 0) {
       return res.status(404).send({ message: 'Mascota no encontrada o no actualizada' });
     }
-    res.status(200).send({ message: 'Mascota actualizada con éxito' });
+    else{
+      Mascota.updateUbicacion(mascota_id, ubicacionData, (err, affectedRows) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        if (affectedRows === 0) {
+          return res.status(404).send({ message: 'Ubicacion no encontrada o no actualizada' });
+        }
+        res.status(200).send({ message: 'Mascota actualizada con éxito' });
+      })
+      
+      
+    }
+   
   });
 };
 exports.deleteMascota = (req, res) => {
