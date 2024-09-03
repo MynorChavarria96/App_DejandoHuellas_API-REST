@@ -17,19 +17,19 @@ const Mascota = {
       if (err) {
         return callback(err);
       }
-      
+
       callback(null, result.insertId);
     });
   },
-  createUbicacion:(ubicacionData, callback) => {
-    const { nombre, latitud, longitud, descripcion_adicional, mascota_id} = ubicacionData;
+  createUbicacion: (ubicacionData, callback) => {
+    const { nombre, latitud, longitud, descripcion_adicional, mascota_id } = ubicacionData;
 
     const query = `
       INSERT INTO ubicaciones (nombre, latitud, longitud, descripcion_adicional, mascota_id) 
       VALUES (?, ?, ?, ?, ?)
     `;
 
-    db.query(query, [ nombre, latitud, longitud, descripcion_adicional, mascota_id], (err, result) => {
+    db.query(query, [nombre, latitud, longitud, descripcion_adicional, mascota_id], (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -50,13 +50,15 @@ const Mascota = {
   findbyQr: (identificador_qr, callback) => {
 
     db.query(`select m.nombre, e.nombre_especie, m.raza, g.nombre_genero, m.fecha_nacimiento, m.color, m.peso, m.foto, m.enfermedad_cronica,
-concat(p.nombres, ' ', p.apellidos)as propietario, p.direccion as residencia, p.telefono, u.email as correo
-from mascotas m
-inner join especies e on e.especie_id = m.especie_id
-inner join generos g on g.genero_id = m.genero_id
-inner join propietarios p on m.propietario_id= p.propietario_id
-inner join usuarios u on p.usuario_id = u.usuario_id
-where m.identificador_qr = ?` , [identificador_qr], callback);
+  concat(p.nombres, ' ', p.apellidos)as propietario, p.direccion as residencia, p.telefono, u.email as correo, 
+  ub.nombre as nombre_ubicacion, ub.latitud, ub.longitud, ub.descripcion_adicional
+  from mascotas m
+  inner join especies e on e.especie_id = m.especie_id
+  inner join generos g on g.genero_id = m.genero_id
+  inner join propietarios p on m.propietario_id= p.propietario_id
+  inner join usuarios u on p.usuario_id = u.usuario_id
+  inner join ubicaciones ub on m.mascota_id = ub.mascota_id
+  where m.identificador_qr = ?` , [identificador_qr], callback);
   },
 
   update: (mascota_id, mascotaData, callback) => {
@@ -76,7 +78,7 @@ where m.identificador_qr = ?` , [identificador_qr], callback);
   },
 
   updateUbicacion: (mascota_id, ubicacionData, callback) => {
-    const {  nombreUbicacion, latitud, longitud, descripcion_adicional} = ubicacionData;
+    const { nombreUbicacion, latitud, longitud, descripcion_adicional } = ubicacionData;
     const query = `
       UPDATE ubicaciones 
       SET nombre = ?, latitud = ?, longitud = ?, descripcion_adicional = ?
