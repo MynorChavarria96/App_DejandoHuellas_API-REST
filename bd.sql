@@ -31,8 +31,6 @@ CREATE TABLE generos (
     nombre_genero VARCHAR(50) NOT NULL
 );
 
-
-
 -- Crear tabla de mascotas
 CREATE TABLE mascotas (
     mascota_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,70 +45,27 @@ CREATE TABLE mascotas (
     propietario_id INT,
     enfermedad_cronica VARCHAR(255) DEFAULT 'No tiene',
     activo tinyint DEFAULT 1,
-    identificadorqr VARCHAR(255),
+    identificador_qr VARCHAR(255),
     FOREIGN KEY (propietario_id) REFERENCES propietarios(propietario_id),
     FOREIGN KEY (especie_id) REFERENCES especies(especie_id),
 	FOREIGN KEY (genero_id) REFERENCES generos(genero_id)
 );
 
--- Crear tabla de salud
-CREATE TABLE salud (
-    salud_id INT AUTO_INCREMENT PRIMARY KEY,
-    mascota_id INT,
-    historial_medico TEXT,
-    enfermedades_previas TEXT,
-    alergias TEXT,
-    medicacion_actual TEXT,
-    esterilizacion BOOLEAN,
-    fecha_ultimo_chequeo DATE,
+CREATE TABLE ubicaciones (
+    ubicacion_id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    latitud DECIMAL(17,14) NOT NULL,
+    longitud DECIMAL(17,14) NOT NULL,
+    descripcion_adicional TEXT,
+    mascota_id INT NOT NULL,
     FOREIGN KEY (mascota_id) REFERENCES mascotas(mascota_id)
-);
-
--- Crear tabla de dieta
-CREATE TABLE dieta (
-    dieta_id INT AUTO_INCREMENT PRIMARY KEY,
-    mascota_id INT,
-    tipo_alimento VARCHAR(100),
-    cantidad VARCHAR(50),
-    frecuencia VARCHAR(50),
-    restricciones_dieteticas TEXT,
-    suplementos TEXT,
-    FOREIGN KEY (mascota_id) REFERENCES mascotas(mascota_id)
-);
-
--- Crear tabla de vacunas
-CREATE TABLE vacunas (
-    vacuna_id INT AUTO_INCREMENT PRIMARY KEY,
-    mascota_id INT,
-    medicamento_aplicado VARCHAR(100),
-    dosis VARCHAR(50),
-    zona_vacuna VARCHAR(100),
-    fecha_vacuna DATE,
-    fecha_proxima_vacuna DATE,
-    FOREIGN KEY (mascota_id) REFERENCES mascotas(mascota_id)
-);
-
--- Crear tabla de desapariciones
-CREATE TABLE desapariciones (
-    desaparicion_id INT AUTO_INCREMENT PRIMARY KEY,
-    mascota_id INT,
-    propietario_id INT,
-    direccion_desaparicion VARCHAR(100),
-    fecha_desaparicion DATE,
-    informacion_adicional TEXT,
-    FOREIGN KEY (mascota_id) REFERENCES mascotas(mascota_id),
-    FOREIGN KEY (propietario_id) REFERENCES propietarios(propietario_id)
 );
 
 INSERT INTO especies (nombre_especie) VALUES
 ('Perro'),
 ('Gato'),
-('Pez'),
-('Ave'),
-('Roedor'),
-('Reptil'),
 ('Otro')
-
+;
 INSERT INTO generos (nombre_genero) VALUES
 ('Macho'),
-('Hembra')
+('Hembra');

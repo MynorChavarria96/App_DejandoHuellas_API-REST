@@ -73,7 +73,7 @@ exports.createMascota = (req, res) => {
 
   Mascota.create(mascotaData, (err, mascotaId) => {
     if (err) {
-      return res.status(500).json({ error: 'Error al registrar mascota' });
+      return res.status(500).json({ error: 'Error al registrar mascota' ,err});
     }
 
     // Verifica si el mascotaId fue devuelto

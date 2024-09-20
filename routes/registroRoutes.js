@@ -1,6 +1,8 @@
 const express = require('express');
 const registroController = require('../controllers/registroController');
 const mascotaController = require('../controllers/mascotaController');
+const reportesController = require('../controllers/reportesController')
+
 
 const router = express.Router();
 
@@ -25,5 +27,7 @@ router.get('/mascotas/mismascotas/:propietario_id', mascotaController.getMisMasc
 
 // Nueva ruta para actualizar la contraseña
 router.put('/usuarios/update-password', registroController.updatePassword);
+
+router.post('/nuevo/reporte', reportesController.reportar);
 
 module.exports = router;
