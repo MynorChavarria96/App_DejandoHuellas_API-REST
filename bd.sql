@@ -32,24 +32,40 @@ CREATE TABLE generos (
 );
 
 -- Crear tabla de mascotas
-CREATE TABLE mascotas (
-    mascota_id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    especie_id INT,
-    raza VARCHAR(50),
-    genero_id INT,
-    fecha_nacimiento DATE,
-    color VARCHAR(50),
-    peso DECIMAL(5, 2),
-    foto VARCHAR(255) NOT NULL, 
-    propietario_id INT,
-    enfermedad_cronica VARCHAR(255) DEFAULT 'No tiene',
-    activo tinyint DEFAULT 1,
-    identificador_qr VARCHAR(255),
-    FOREIGN KEY (propietario_id) REFERENCES propietarios(propietario_id),
-    FOREIGN KEY (especie_id) REFERENCES especies(especie_id),
-	FOREIGN KEY (genero_id) REFERENCES generos(genero_id)
-);
+CREATE TABLE `mascotas` (
+  `mascota_id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  `especie_id` int DEFAULT NULL,
+  `raza` varchar(50) DEFAULT NULL,
+  `genero_id` int DEFAULT NULL,
+  `fecha_nacimiento` date DEFAULT NULL,
+  `color` varchar(50) DEFAULT NULL,
+  `peso` decimal(5,2) DEFAULT NULL,
+  `foto` varchar(255) NOT NULL,
+  `propietario_id` int DEFAULT NULL,
+  `enfermedad_cronica` varchar(255) DEFAULT 'No tiene',
+  `activo` tinyint DEFAULT '1',
+  `identificador_qr` varchar(255) DEFAULT NULL,
+  `desaparecido` tinyint DEFAULT '0',
+  PRIMARY KEY (`mascota_id`),
+  KEY `propietario_id` (`propietario_id`),
+  KEY `especie_id` (`especie_id`),
+  KEY `genero_id` (`genero_id`),
+  CONSTRAINT `mascotas_ibfk_1` FOREIGN KEY (`propietario_id`) REFERENCES `propietarios` (`propietario_id`),
+  CONSTRAINT `mascotas_ibfk_2` FOREIGN KEY (`especie_id`) REFERENCES `especies` (`especie_id`),
+  CONSTRAINT `mascotas_ibfk_3` FOREIGN KEY (`genero_id`) REFERENCES `generos` (`genero_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `reporte_desaparecidos` (
+  `reporteD_id` int NOT NULL AUTO_INCREMENT,
+  `fecha_desaparicion` date NOT NULL,
+  `hora_desaparicion` time NOT NULL,
+  `descripcion_desaparicion` text,
+  `ubicacionid_desaparicion` int NOT NULL,
+  `mascotaid_desaparicion` int NOT NULL,
+  PRIMARY KEY (`reporteD_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE ubicaciones (
     ubicacion_id INT AUTO_INCREMENT PRIMARY KEY,

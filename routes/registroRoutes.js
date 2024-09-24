@@ -29,5 +29,6 @@ router.get('/mascotas/mismascotas/:propietario_id', mascotaController.getMisMasc
 router.put('/usuarios/update-password', registroController.updatePassword);
 
 router.post('/nuevo/reporte', reportesController.reportar);
+router.get('/get/reporteDes', reportesController.getReporteDesaparecidos);
 
 module.exports = router;
