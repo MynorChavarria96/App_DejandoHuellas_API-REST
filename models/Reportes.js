@@ -34,8 +34,8 @@ const Reporte = {
   createRD: (reporteData, callback) => {
     const { fecha_desaparicion, hora_desaparicion, descripcion_desaparicion, ubicacionid_desaparicion, mascotaid_desaparicion } = reporteData;
     db.query(
-      'INSERT INTO reporte_desaparecidos (nombre_reporta, correo_reporta, fecha_reporta, telefono_reporta, descripcion_adicional, mascota_id ) VALUES (?, ?, ?, ?, ?,?)',
-      [nombre_reporta, correo_reporta, fecha_reporta, telefono_reporta, descripcion_adicional, mascota_id ],
+      'INSERT INTO reporte_desaparecidos (fecha_desaparicion, hora_desaparicion, descripcion_desaparicion, ubicacionid_desaparicion, mascotaid_desaparicion ) VALUES (?, ?, ?, ?, ?)',
+      [fecha_desaparicion, hora_desaparicion, descripcion_desaparicion, ubicacionid_desaparicion, mascotaid_desaparicion],
       (err, result) => {
         if (err) {
           return callback(err);

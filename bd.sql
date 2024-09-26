@@ -85,3 +85,16 @@ INSERT INTO especies (nombre_especie) VALUES
 INSERT INTO generos (nombre_genero) VALUES
 ('Macho'),
 ('Hembra');
+
+--triger para colocar como desaparecido
+DELIMITER //
+CREATE TRIGGER update_mascota_desaparecida
+AFTER INSERT ON reporte_desaparecidos
+FOR EACH ROW
+BEGIN
+    UPDATE mascotas
+    SET desaparecido = 1
+    WHERE mascota_id = NEW.mascotaid_desaparicion;
+END//
+
+DELIMITER ;
