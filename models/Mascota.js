@@ -3,17 +3,17 @@ const crypto = require('crypto');
 
 const Mascota = {
   create: (mascotaData, callback) => {
-    const { nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica } = mascotaData;
+    const { nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, ubicacionId } = mascotaData;
 
     // Generar el identificador QR
     const identificador_qr = crypto.randomBytes(16).toString('hex');
 
     const query = `
-      INSERT INTO mascotas (nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, identificador_qr) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO mascotas (nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, identificador_qr, ubicacionId) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
     `;
 
-    db.query(query, [nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, identificador_qr], (err, result) => {
+    db.query(query, [nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, identificador_qr, ubicacionId], (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -22,14 +22,14 @@ const Mascota = {
     });
   },
   createUbicacion: (ubicacionData, callback) => {
-    const { nombre, latitud, longitud, descripcion_adicional, mascota_id } = ubicacionData;
+    const { nombre, latitud, longitud, descripcion_adicional } = ubicacionData;
 
     const query = `
-      INSERT INTO ubicaciones (nombre, latitud, longitud, descripcion_adicional, mascota_id) 
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO ubicaciones (nombre, latitud, longitud, descripcion_adicional) 
+      VALUES (?, ?, ?, ?)
     `;
 
-    db.query(query, [nombre, latitud, longitud, descripcion_adicional, mascota_id], (err, result) => {
+    db.query(query, [nombre, latitud, longitud, descripcion_adicional], (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -40,11 +40,11 @@ const Mascota = {
 
     db.query(`select m.mascota_id, m.nombre, m.especie_id, e.nombre_especie, m.raza, m.genero_id, g.nombre_genero, m.fecha_nacimiento,
        m.color, m.peso, m.foto, m.enfermedad_cronica, m.identificador_qr, 
-       u.nombre as nombre_lugar, u.descripcion_adicional as descripcion_lugar, u.latitud, u.longitud
+       u.ubicacion_id, u.nombre as nombre_lugar, u.descripcion_adicional as descripcion_lugar, u.latitud, u.longitud
     from mascotas m
     inner join especies e on e.especie_id = m.especie_id
     inner join generos g on g.genero_id = m.genero_id
-    inner join ubicaciones u on u.mascota_id = m.mascota_id
+    inner join ubicaciones u on u.ubicacion_id = m.ubicacionId
     where m.propietario_id = ? and activo = 1 order by m.mascota_id desc` , [propietario_id], callback);
   },
   findbyQr: (identificador_qr, callback) => {
@@ -56,19 +56,19 @@ const Mascota = {
   inner join generos g on g.genero_id = m.genero_id
   inner join propietarios p on m.propietario_id= p.propietario_id
   inner join usuarios u on p.usuario_id = u.usuario_id
-  inner join ubicaciones ub on m.mascota_id = ub.mascota_id
+  inner join ubicaciones ub on ub.ubicacion_id = m.ubicacionId
   where m.identificador_qr = ?` , [identificador_qr], callback);
   },
 
   update: (mascota_id, mascotaData, callback) => {
-    const { nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica } = mascotaData;
+    const { nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, ubicacionId } = mascotaData;
     const query = `
       UPDATE mascotas 
-      SET nombre = ?, especie_id = ?, raza = ?, genero_id = ?, fecha_nacimiento = ?, color = ?, peso = ?, foto = ?, propietario_id = ?, enfermedad_cronica = ?
+      SET nombre = ?, especie_id = ?, raza = ?, genero_id = ?, fecha_nacimiento = ?, color = ?, peso = ?, foto = ?, propietario_id = ?, enfermedad_cronica = ?, ubicacionId=?
       WHERE mascota_id = ? 
     `;
 
-    db.query(query, [nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, mascota_id], (err, result) => {
+    db.query(query, [nombre, especie_id, raza, genero_id, fecha_nacimiento, color, peso, foto, propietario_id, enfermedad_cronica, ubicacionId, mascota_id], (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -76,15 +76,15 @@ const Mascota = {
     });
   },
 
-  updateUbicacion: (mascota_id, ubicacionData, callback) => {
+  updateUbicacion: (ubicacion_id, ubicacionData, callback) => {
     const { nombreUbicacion, latitud, longitud, descripcion_adicional } = ubicacionData;
     const query = `
       UPDATE ubicaciones 
       SET nombre = ?, latitud = ?, longitud = ?, descripcion_adicional = ?
-      WHERE mascota_id = ? 
+      WHERE ubicacion_id = ? 
     `;
 
-    db.query(query, [nombreUbicacion, latitud, longitud, descripcion_adicional, mascota_id], (err, result) => {
+    db.query(query, [nombreUbicacion, latitud, longitud, descripcion_adicional, ubicacion_id], (err, result) => {
       if (err) {
         return callback(err);
       }

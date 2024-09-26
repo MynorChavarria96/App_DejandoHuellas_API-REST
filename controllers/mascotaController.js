@@ -61,7 +61,7 @@ exports.createMascota = (req, res) => {
     peso,
     foto,
     propietario_id,
-    enfermedad_cronica: enfermedad_cronica || 'No tiene' // Valor por defecto si no se proporciona
+    enfermedad_cronica: enfermedad_cronica || 'No tiene', // Valor por defecto si no se proporciona
   };
 
   const ubicacionData = {
@@ -71,40 +71,39 @@ exports.createMascota = (req, res) => {
     descripcion_adicional,
   };
 
-  Mascota.create(mascotaData, (err, mascotaId) => {
+  // Inserta la ubicación primero
+  Mascota.createUbicacion(ubicacionData, (err, ubicacionId) => {
     if (err) {
-      return res.status(500).json({ error: 'Error al registrar mascota' ,err});
+      return res.status(500).json({ error: 'Error al insertar ubicación' });
     }
 
-    // Verifica si el mascotaId fue devuelto
-    if (mascotaId) {
-      ubicacionData.mascota_id = mascotaId;
-      // Llama a la función adicional pasando el mascotaId
-      Mascota.createUbicacion(ubicacionData, (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: 'Error al insertar ubicación' });
-        }
-        // Responde con un mensaje de éxito y el resultado de la otra función
-        res.status(201).json({ message: 'Mascota registrada con éxito y ubicación guardada', mascotaId, result });
-      });
-    } else {
-      res.status(201).json({ message: 'Mascota registrada con éxito, pero no se obtuvo mascotaId' });
-    }
+    // Agrega el ID de la ubicación al objeto mascota
+    mascotaData.ubicacionId = ubicacionId;
+
+    // Luego inserta la mascota
+    Mascota.create(mascotaData, (err, mascotaId) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error al registrar mascota', err });
+      }
+
+      // Responde con éxito si todo salió bien
+      res.status(201).json({ message: 'Mascota Creada', mascotaId });
+    });
   });
 };
 
 exports.createubicacion = (req, res) => {
-  const { nombreUbicacion, latitud, longitud, descripcion_adicional, mascota_id } = req.body;
+  const { nombreUbicacion, latitud, longitud, descripcion_adicional } = req.body;
 
   const ubicacionData = {
-    nombreUbicacion, latitud, longitud, descripcion_adicional, mascota_id
+    nombreUbicacion, latitud, longitud, descripcion_adicional
   };
 
-  Mascota.createUbicacion(ubicacionData, (err, ubicacionId) => {
+  Mascota.createUbicacion(ubicacionData, (err, ubicacion_id) => {
     if (err) {
       return res.status(500).json({ error: 'Error al registrar ubicacion' });
     }
-    res.status(201).json({ message: 'Ubicacion registrada con éxito', ubicacionId });
+    res.status(201).json({ message: 'Ubicacion registrada con éxito', ubicacion_id });
   });
 };
 
@@ -138,6 +137,7 @@ exports.getMascotabyQr = (req, res) => {
 exports.updateMascota = (req, res) => {
   const mascota_id = req.params.mascota_id;
   const mascotaData = req.body;
+  const ubicacionid = mascotaData.ubicacionId;
   const { nombreUbicacion, latitud, longitud, descripcion_adicional } = mascotaData;
   const ubicacionData = {
     nombreUbicacion,
@@ -154,7 +154,7 @@ exports.updateMascota = (req, res) => {
       return res.status(404).send({ message: 'Mascota no encontrada o no actualizada' });
     }
     else{
-      Mascota.updateUbicacion(mascota_id, ubicacionData, (err, affectedRows) => {
+      Mascota.updateUbicacion(ubicacionid, ubicacionData, (err, affectedRows) => {
         if (err) {
           return res.status(500).send(err);
         }
