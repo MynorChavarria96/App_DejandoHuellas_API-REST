@@ -1,78 +1,128 @@
 const Reporte = require('../models/Reportes');
 const Mascota = require('../models/Mascota');
 
-exports.reportar = (req, res) => {
-    const { nombre_reporta, correo_reporta, fecha_reporta, telefono_reporta, descripcion_adicional, mascota_id} = req.body;
-  
-    Reporte.createRA({ nombre_reporta, correo_reporta, fecha_reporta, telefono_reporta, descripcion_adicional, mascota_id }, (err, reporte_id) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-          }
-    
-          res.status(201).json({ message: 'Registro exitoso', reporte_id });
 
-    });
+
+//Reporte Aparecidos
+exports.reportarA = (req, res) => {
+  const {
+    nombre_reporta,
+    correo_reporta,
+    fecha_reporta,
+    telefono_reporta,
+    descripcion_reporta,
+    mascota_id,
+    latitud,
+    longitud,
+    nombreUbicacion,
+    descripcionUbicacion,
+  } = req.body;
+
+  const ReporteData = {
+    nombre_reporta,
+    correo_reporta,
+    fecha_reporta,
+    telefono_reporta,
+    descripcion_reporta,
+    mascota_id,
   };
-//Reporte Desaparecidos
-  exports.reportarD = (req, res) => {
-    const { 
-      fecha_desaparicion,
-      hora_desaparicion,
-      descripcion_desaparicion,
-      latitud,
-      longitud,
-      nombreUbicacion,
-      descripcionUbicacion,
-      mascotaid_desaparicion
-    } = req.body;
-    
-    const ReporteData = {
-      fecha_desaparicion,
-      hora_desaparicion,
-      descripcion_desaparicion,
-      mascotaid_desaparicion
-    };
-  
-    const ubicacionData = {
-      nombre: nombreUbicacion,
-      latitud,
-      longitud,
-      descripcion_adicional: descripcionUbicacion,
-    };
+ 
 
-    
+  const ubicacionData = {
+    nombre: nombreUbicacion,
+    latitud,
+    longitud,
+    descripcion_adicional: descripcionUbicacion,
+  };
+
   // Inserta la ubicación primero
   Mascota.createUbicacion(ubicacionData, (err, ubicacionId) => {
     if (err) {
       return res.status(500).json({ error: 'Error al insertar ubicación' });
     }
 
+    // Agrega el ID de la ubicación al objeto ReporteData
+    ReporteData.ubicacion_id = ubicacionId;
+    
 
-    // Agrega el ID de la ubicación al objeto mascota
-    ReporteData.ubicacionid_desaparicion = ubicacionId;
-
-    // Luego inserta la mascota
-    Reporte.createRD(ReporteData, (err, reporteId) => {
+    // Luego inserta el reporte
+    Reporte.createRA(ReporteData, (err, response) => {
       if (err) {
-        return res.status(500).json({ error: 'Error al crear reporte', err });
+        // Maneja el error en caso de que ya exista un reporte activo
+        if (err.status === 400) {
+          return res.status(400).json({ message: err.message });
+        }
+        return res.status(500).json({ message: 'Error al crear reporte de Aparicion', error: err.error });
       }
 
       // Responde con éxito si todo salió bien
-      res.status(201).json({ message: 'Reporte creado', reporteId });
+      res.status(response.status).json({ message: response.message, reporteId: response.id });
     });
   });
-    
+};
+
+
+//Reporte Desaparecidos
+exports.reportarD = (req, res) => {
+  const {
+    fecha_desaparicion,
+    hora_desaparicion,
+    descripcion_desaparicion,
+    latitud,
+    longitud,
+    nombreUbicacion,
+    descripcionUbicacion,
+    mascotaid_desaparicion
+  } = req.body;
+
+  const ReporteData = {
+    fecha_desaparicion,
+    hora_desaparicion,
+    descripcion_desaparicion,
+    mascotaid_desaparicion
   };
 
+  const ubicacionData = {
+    nombre: nombreUbicacion,
+    latitud,
+    longitud,
+    descripcion_adicional: descripcionUbicacion,
+  };
 
-  exports.getReporteDesaparecidos = (req, res) => {
-    Reporte.findReportesDesaparecidos( (err, result) => {
+  // Inserta la ubicación primero
+  Mascota.createUbicacion(ubicacionData, (err, ubicacionId) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error al insertar ubicación' });
+    }
+
+    // Agrega el ID de la ubicación al objeto ReporteData
+    ReporteData.ubicacionid_desaparicion = ubicacionId;
+
+    // Luego inserta el reporte
+    Reporte.createRD(ReporteData, (err, response) => {
       if (err) {
-        return res.status(500).send(err);
+        // Maneja el error en caso de que ya exista un reporte activo
+        if (err.status === 400) {
+          return res.status(400).json({ message: err.message });
+        }
+        return res.status(500).json({ message: 'Error al crear reporte', error: err.error });
       }
-      if (result.length === 0) {
-        return res.status(404).send({ message: 'No hay Reportes' });
-      }
-      res.send(result);
+
+      // Responde con éxito si todo salió bien
+      res.status(response.status).json({ message: response.message, reporteId: response.id });
     });
-  };
+  });
+};
+
+
+exports.getReporteDesaparecidos = (req, res) => {
+  Reporte.findReportesDesaparecidos((err, result) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.length === 0) {
+      return res.status(404).send({ message: 'No hay Reportes' });
+    }
+    res.send(result);
+  });
+};

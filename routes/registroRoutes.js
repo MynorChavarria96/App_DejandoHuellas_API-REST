@@ -28,7 +28,7 @@ router.get('/mascotas/mismascotas/:propietario_id', mascotaController.getMisMasc
 // Nueva ruta para actualizar la contraseña
 router.put('/usuarios/update-password', registroController.updatePassword);
 
-router.post('/nuevo/reporte', reportesController.reportar);
+router.post('/nuevo/reporteApa', reportesController.reportarA);
 router.post('/nuevo/reporteDes', reportesController.reportarD);
 router.get('/get/reporteDes', reportesController.getReporteDesaparecidos);
 

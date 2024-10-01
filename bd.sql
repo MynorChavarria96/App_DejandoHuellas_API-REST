@@ -66,6 +66,22 @@ CREATE TABLE `reporte_desaparecidos` (
   PRIMARY KEY (`reporteD_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `reporte_encontrados` (
+  `reporte_id` int NOT NULL AUTO_INCREMENT,
+  `fecha_reporta` date DEFAULT NULL,
+  `nombre_reporta` varchar(150) NOT NULL,
+  `correo_reporta` varchar(100) DEFAULT NULL,
+  `telefono_reporta` varchar(15) NOT NULL,
+  `descripcion_reporta` varchar(255) DEFAULT NULL,
+  `ubicacion_id` int DEFAULT NULL,
+  `mascota_id` int DEFAULT NULL,
+  PRIMARY KEY (`reporte_id`),
+  KEY `mascota_id` (`mascota_id`),
+  KEY `ubicacion_id` (`ubicacion_id`),
+  CONSTRAINT `reporte_encontrados_ibfk_1` FOREIGN KEY (`mascota_id`) REFERENCES `mascotas` (`mascota_id`),
+  CONSTRAINT `reporte_encontrados_ibfk_2` FOREIGN KEY (`ubicacion_id`) REFERENCES `ubicaciones` (`ubicacion_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE ubicaciones (
     ubicacion_id INT AUTO_INCREMENT PRIMARY KEY,
