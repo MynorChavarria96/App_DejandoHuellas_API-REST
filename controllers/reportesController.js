@@ -126,3 +126,16 @@ exports.getReporteDesaparecidos = (req, res) => {
     res.send(result);
   });
 };
+exports.deleteReport= (req, res) => {
+  const mascota_id = req.params.mascota_id;
+
+  Reporte.deleteReport(mascota_id, (err, affectedRows) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (affectedRows === 0) {
+      return res.status(404).send({ message: 'No se ha encontrado la mascota especificada' });
+    }
+    res.status(200).send({ message: 'Reporte eliminado con éxito' });
+  });
+};
