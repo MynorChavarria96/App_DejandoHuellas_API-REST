@@ -139,3 +139,16 @@ exports.deleteReport= (req, res) => {
     res.status(200).send({ message: 'Reporte eliminado con éxito' });
   });
 };
+
+exports.getRepoteAparecidos= (req, res) => {
+  const identificador_qr = req.params.identificador_qr;
+  Reporte.getInfoReporteAp(identificador_qr, (err, result) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.length === 0) {
+      return res.status(404).send({ message: 'No se encontró el reporte' });
+    }
+    res.send(result);
+  });
+};

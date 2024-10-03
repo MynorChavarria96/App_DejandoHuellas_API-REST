@@ -95,6 +95,20 @@ WHERE m.desaparecido = '1'
 ORDER BY rd.fecha_desaparicion DESC`, callback);
   },
   //and rd.activo = '1'
+
+  getInfoReporteAp: (identificador_qr, callback) => {
+    db.query(`select  e.fecha_reporta, e.nombre_reporta, e.correo_reporta, e.telefono_reporta, e.descripcion_reporta, 
+u.nombre as nombre_ubicacion, u.descripcion_adicional, u.latitud, u.longitud, m.nombre, m.foto
+from reporte_encontrados e
+inner join ubicaciones u on e.ubicacion_id = u.ubicacion_id
+inner join mascotas m on e.mascota_id = m.mascota_id
+Where m.identificador_qr = ?
+ORDER BY reporte_id desc
+LIMIT 1` , [identificador_qr], callback);
+  },
+
 };
+
+
 
 module.exports = Reporte;

@@ -48,7 +48,7 @@ const Mascota = {
     where m.propietario_id = ? and activo = 1 order by m.mascota_id desc` , [propietario_id], callback);
   },
   findbyQr: (identificador_qr, callback) => {
-    db.query(`select m.mascota_id, m.nombre, e.nombre_especie, m.raza, g.nombre_genero, m.fecha_nacimiento, m.color, m.peso, m.foto, m.enfermedad_cronica,
+    db.query(`select m.mascota_id, m.nombre, e.nombre_especie, m.raza, g.nombre_genero, m.fecha_nacimiento, m.color, m.peso, m.foto, m.enfermedad_cronica, m.identificador_qr,
   concat(p.nombres, ' ', p.apellidos)as propietario, p.direccion as residencia, p.telefono, u.email as correo, 
   ub.nombre as nombre_ubicacion, ub.latitud, ub.longitud, ub.descripcion_adicional
   from mascotas m

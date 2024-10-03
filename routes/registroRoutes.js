@@ -31,6 +31,7 @@ router.put('/usuarios/update-password', registroController.updatePassword);
 router.post('/nuevo/reporteApa', reportesController.reportarA);
 router.post('/nuevo/reporteDes', reportesController.reportarD);
 router.get('/get/reporteDes', reportesController.getReporteDesaparecidos);
+router.get('/get/reporteApa/:identificador_qr', reportesController.getRepoteAparecidos);
 router.put('/deleteReport/:mascota_id', reportesController.deleteReport);
 
 module.exports = router;
