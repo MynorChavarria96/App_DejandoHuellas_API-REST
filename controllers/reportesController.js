@@ -52,7 +52,7 @@ exports.reportarA = (req, res) => {
         if (err.status === 400) {
           return res.status(400).json({ message: err.message });
         }
-        return res.status(500).json({ message: 'Error al crear reporte de Aparicion', error: err.error });
+        return res.status(500).json({ message: `Error al crear reporte de Aparicion ${err}` });
       }
 
       // Responde con éxito si todo salió bien

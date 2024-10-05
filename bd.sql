@@ -93,6 +93,17 @@ CREATE TABLE ubicaciones (
     FOREIGN KEY (mascota_id) REFERENCES mascotas(mascota_id)
 );
 
+create table vacunacion(
+id_vacunacion Int AUTO_INCREMENT PRIMARY KEY,
+medicamento nvarchar(200) not null,
+dosis nvarchar(25) null,
+descripcion_adicional text null,
+fecha_aplicacion date not null,
+proxima_fecha_aplicacion date null,
+nombre_veterinario nvarchar(250),
+id_mascota Int,
+FOREIGN KEY (id_mascota) REFERENCES mascotas(mascota_id)
+);
 INSERT INTO especies (nombre_especie) VALUES
 ('Perro'),
 ('Gato'),
@@ -111,6 +122,18 @@ BEGIN
     UPDATE mascotas
     SET desaparecido = 1
     WHERE mascota_id = NEW.mascotaid_desaparicion;
+END//
+
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER update_mascota_encontrada
+AFTER INSERT ON reporte_encontrados
+FOR EACH ROW
+BEGIN
+    UPDATE reporte_desaparecidos
+    SET activo = 0
+    WHERE mascotaid_desaparicion= NEW.mascota_id;
 END//
 
 DELIMITER ;

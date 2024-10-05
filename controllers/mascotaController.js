@@ -182,3 +182,51 @@ exports.deleteMascota = (req, res) => {
     res.status(200).send({ message: 'Mascota eliminada con éxito' });
   });
 };
+
+exports.createVacunacion = (req, res) => {
+  const { 
+    medicamento, 
+    dosis, 
+    descripcion_adicional, 
+    fecha_aplicacion, 
+    proxima_fecha_aplicacion, // Corrección en el nombre del campo
+    nombre_veterinario, 
+    id_mascota 
+  } = req.body;
+
+  // Validación de campos obligatorios
+  if (!medicamento || !fecha_aplicacion || !nombre_veterinario || !id_mascota) {
+    return res.status(400).json({ error: 'Los campos medicamento, fecha de aplicación, nombre del veterinario e id de mascota son obligatorios.' });
+  }
+
+  const vacunacionData = {
+    medicamento, 
+    dosis, 
+    descripcion_adicional, 
+    fecha_aplicacion, 
+    proxima_fecha_aplicacion, 
+    nombre_veterinario, 
+    id_mascota
+  };
+
+  Mascota.createVacunacion(vacunacionData, (err, ubicacion_id) => {
+    if (err) {
+      console.error('Error al registrar la vacunación:', err); // Para diagnóstico
+      return res.status(500).json({ error: 'Error al registrar Vacunación' });
+    }
+    res.status(201).json({ message: 'Vacunación registrada con éxito', ubicacion_id });
+  });
+};
+
+exports.getVacunacion = (req, res) => {
+  const mascota_id = req.params.mascota_id;
+  Mascota.getVacunacion(mascota_id, (err, result) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.length === 0) {
+      return res.status(404).send({ message: `No se encontró datos de vacunacion de la mascota ${mascota_id}` });
+    }
+    res.send(result);
+  });
+};

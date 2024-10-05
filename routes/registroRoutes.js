@@ -16,10 +16,11 @@ router.get('/mascotas/especies', mascotaController.getEspeciesAll);
 router.get('/mascotas/generos', mascotaController.getGenerosAll);
 
 router.get('/infoqr/:identificador_qr', mascotaController.getMascotabyQr);
-
+router.get('/mascotas/vacunas/:mascota_id', mascotaController.getVacunacion);
 // Ruta para crear una nueva mascota
 router.post('/mascotas', mascotaController.createMascota);
 router.post('/mascotas/ubicaciones', mascotaController.createubicacion);
+router.post('/mascotas/vacunas', mascotaController.createVacunacion);
 router.put('/mascotas/update/:mascota_id', mascotaController.updateMascota);
 router.put('/mascotas/delete/:mascota_id', mascotaController.deleteMascota);
 
