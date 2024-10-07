@@ -107,14 +107,14 @@ const Mascota = {
     });
   },
   createVacunacion: (vacunacionData, callback) => {
-    const { medicamento, dosis, descripcion_adicional, fecha_aplicacion, procima_fecha_aplicacion, nombre_veterinario, id_mascota } = vacunacionData;
+    const { medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota } = vacunacionData;
 
     const query = `
       INSERT INTO vacunacion (medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota) 
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(query, [medicamento, dosis, descripcion_adicional, fecha_aplicacion, procima_fecha_aplicacion, nombre_veterinario, id_mascota], (err, result) => {
+    db.query(query, [medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota], (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -122,7 +122,7 @@ const Mascota = {
     });
   },
   getVacunacion: (mascota_id, callback) => {
-    db.query(`select v.medicamento, v.dosis, v.descripcion_adicional, v.fecha_aplicacion, v.proxima_fecha_aplicacion, v.nombre_veterinario, m.nombre from vacunacion v
+    db.query(`select v.id_vacunacion , v.medicamento, v.dosis, v.descripcion_adicional, v.fecha_aplicacion, v.proxima_fecha_aplicacion, v.nombre_veterinario, m.nombre from vacunacion v
       inner join mascotas m on m.mascota_id = id_mascota
       where v.id_mascota =  ?` , [mascota_id], callback);
   },
