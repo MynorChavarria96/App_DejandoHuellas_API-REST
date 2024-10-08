@@ -218,6 +218,37 @@ exports.createVacunacion = (req, res) => {
   });
 };
 
+exports.updateVacunacion = (req, res) => {
+  const id_vacunacion = req.params.id_vacunacion; 
+  const data = req.body;
+
+  Mascota.updateVacunacion(id_vacunacion, data, (err, affectedRows) => {
+    if (err) {
+      
+      return res.status(500).json({ error: 'Error al editar Vacunación' });
+    }
+    if (affectedRows === 0) {
+      return res.status(404).send({ message: 'Vacunacion no actualizada' });
+    }
+        res.status(200).send({ message: 'Vacunacion actualizada con éxito' });
+
+  });
+};
+
+exports.deleteVacunacion = (req, res) => {
+  const id_vacunacion = req.params.id_vacunacion; // Obtener el id de la vacunación desde los parámetros de la URL
+
+  Mascota.deleteVacunacion(id_vacunacion, (err, result) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result === 0) {
+      return res.status(404).send({ message: `No se encontró la vacunación con ID ${id_vacunacion}` });
+    }
+    res.send({ message: `Vacunación con ID ${id_vacunacion} eliminada exitosamente.` });
+  });
+};
+
 exports.getVacunacion = (req, res) => {
   const mascota_id = req.params.mascota_id;
   Mascota.getVacunacion(mascota_id, (err, result) => {

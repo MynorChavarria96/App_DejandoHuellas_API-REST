@@ -106,6 +106,22 @@ const Mascota = {
       callback(null, result.affectedRows);
     });
   },
+
+  deleteVacunacion: (id_vacunacion, callback) => {
+    const query = `
+         Delete  from
+      vacunacion
+      WHERE id_vacunacion= ? 
+    `;
+
+    db.query(query, id_vacunacion, (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, result.affectedRows);
+    });
+  },
+
   createVacunacion: (vacunacionData, callback) => {
     const { medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota } = vacunacionData;
 
@@ -121,6 +137,25 @@ const Mascota = {
       callback(null, result.insertId);
     });
   },
+
+  updateVacunacion: (id_vacunacion, vacunacionData,  callback) => {
+    const { medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota } = vacunacionData;
+
+    const query = `
+    UPDATE vacunacion 
+    SET \`medicamento\` = ?, \`dosis\` = ?, \`descripcion_adicional\` = ?, \`fecha_aplicacion\` = ?, \`proxima_fecha_aplicacion\` = ?, \`nombre_veterinario\` = ?, \`id_mascota\` = ?
+    WHERE \`id_vacunacion\` = ? 
+  `;
+
+    db.query(query, [medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota, id_vacunacion], (err, result) => {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, result.affectedRows);
+    });
+  },
+
+
   getVacunacion: (mascota_id, callback) => {
     db.query(`select v.id_vacunacion , v.medicamento, v.dosis, v.descripcion_adicional, v.fecha_aplicacion, v.proxima_fecha_aplicacion, v.nombre_veterinario, m.nombre from vacunacion v
       inner join mascotas m on m.mascota_id = id_mascota

@@ -17,6 +17,9 @@ router.get('/mascotas/generos', mascotaController.getGenerosAll);
 
 router.get('/infoqr/:identificador_qr', mascotaController.getMascotabyQr);
 router.get('/mascotas/vacunas/:mascota_id', mascotaController.getVacunacion);
+
+router.delete('/mascotas/vacunas/:id_vacunacion', mascotaController.deleteVacunacion);
+router.put('/mascotas/vacunas/update/:id_vacunacion', mascotaController.updateVacunacion);
 // Ruta para crear una nueva mascota
 router.post('/mascotas', mascotaController.createMascota);
 router.post('/mascotas/ubicaciones', mascotaController.createubicacion);
