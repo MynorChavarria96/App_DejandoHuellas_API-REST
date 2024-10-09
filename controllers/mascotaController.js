@@ -224,7 +224,7 @@ exports.updateVacunacion = (req, res) => {
 
   Mascota.updateVacunacion(id_vacunacion, data, (err, affectedRows) => {
     if (err) {
-      
+ 
       return res.status(500).json({ error: 'Error al editar Vacunación' });
     }
     if (affectedRows === 0) {

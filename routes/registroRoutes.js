@@ -15,6 +15,8 @@ router.get('/Propietarios/id/:usuario_id', registroController.getPropietarioById
 router.get('/mascotas/especies', mascotaController.getEspeciesAll);
 router.get('/mascotas/generos', mascotaController.getGenerosAll);
 
+router.get('/mascotas/vacunas/imprimir/:mascota_id', reportesController.getReporteImprimir);
+
 router.get('/infoqr/:identificador_qr', mascotaController.getMascotabyQr);
 router.get('/mascotas/vacunas/:mascota_id', mascotaController.getVacunacion);
 

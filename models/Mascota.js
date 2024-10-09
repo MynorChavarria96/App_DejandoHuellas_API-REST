@@ -139,9 +139,9 @@ const Mascota = {
   },
 
   updateVacunacion: (id_vacunacion, vacunacionData,  callback) => {
-    const { medicamento, dosis, descripcion_adicional, fecha_aplicacion, proxima_fecha_aplicacion, nombre_veterinario, id_mascota } = vacunacionData;
-
-    const query = `
+    const { medicamento, dosis, descripcion_adicional, fecha_aplicacion, nombre_veterinario, id_mascota } = vacunacionData;
+    const proxima_fecha_aplicacion = vacunacionData.proxima_fecha_aplicacion || null;
+   const query = `
     UPDATE vacunacion 
     SET \`medicamento\` = ?, \`dosis\` = ?, \`descripcion_adicional\` = ?, \`fecha_aplicacion\` = ?, \`proxima_fecha_aplicacion\` = ?, \`nombre_veterinario\` = ?, \`id_mascota\` = ?
     WHERE \`id_vacunacion\` = ? 

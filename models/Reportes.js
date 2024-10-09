@@ -107,7 +107,22 @@ ORDER BY reporte_id desc
 LIMIT 1` , [identificador_qr], callback);
   },
 
+  getInfoImprimir: (mascota_id, callback)=>{
+  db.query(`  select m.nombre as mascota_nombre, e.nombre_especie as mascota_especie, m.raza as mascota_raza, g.nombre_genero as mascota_genero, m.fecha_nacimiento as mascota_fecha_nacimiento,
+  m.color as mascota_color, m.peso as mascota_peso, m.foto as mascota_foto, m.enfermedad_cronica as mascota_enfermedad_cronica,  ub.nombre as mascota_casa, ub.descripcion_adicional as mascota_direccion,
+  concat(p.nombres, ' ', p.apellidos)as propietario_nombre, p.direccion as propietario_residencia, p.telefono as propietario_telefono, u.email as propietario_correo
+  from mascotas m
+  inner join especies e on e.especie_id = m.especie_id
+  inner join generos g on g.genero_id = m.genero_id
+  inner join propietarios p on m.propietario_id= p.propietario_id
+  inner join usuarios u on p.usuario_id = u.usuario_id
+  inner join ubicaciones ub on ub.ubicacion_id = m.ubicacionId
+  where m.mascota_id  = ?`,[mascota_id], callback);
+  }
+
 };
+
+
 
 
 

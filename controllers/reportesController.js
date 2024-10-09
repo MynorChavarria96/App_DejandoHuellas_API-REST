@@ -152,3 +152,16 @@ exports.getRepoteAparecidos= (req, res) => {
     res.send(result);
   });
 };
+
+exports.getReporteImprimir = (req, res) => {
+  const mascota_id = req.params.mascota_id;
+  Reporte.getInfoImprimir(mascota_id, (err, result) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    if (result.length === 0) {
+      return res.status(404).send({ message: 'No se encontró la mascota' });
+    }
+    res.send(result);
+  });
+};
